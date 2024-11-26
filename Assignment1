@@ -1,0 +1,99 @@
+using System;
+using System.Collections.Generic;
+
+public class Baby
+{
+    public string Name { get; set; }
+    public bool IsStepChild { get; set; }
+
+    public Baby(string name, bool isStepChild)
+    {
+        Name = name;
+        IsStepChild = isStepChild;
+    }
+}
+
+public class Couple
+{
+    public string Partner1 { get; set; }
+    public string Partner2 { get; set; }
+    private List<Baby> Children;
+
+    public Couple(string partner1, string partner2)
+    {
+        Partner1 = partner1;
+        Partner2 = partner2;
+        Children = new List<Baby>();
+    }
+
+    public bool HasKids()
+    {
+        return Children.Count > 0;
+    }
+
+    public void AdoptChild(string childName, bool isStepChild = false)
+    {
+        Baby adoptedBaby = new Baby(childName, isStepChild);
+        Children.Add(adoptedBaby);
+        Console.WriteLine($"{Partner1} and {Partner2} have adopted a child named {childName}.");
+    }
+
+    public void ShowParents(Baby baby)
+    {
+        Console.WriteLine($"{baby.Name} is the child of {Partner1} and {Partner2}.");
+    }
+
+    public void ShowChildren()
+    {
+        if (Children.Count == 0)
+        {
+            Console.WriteLine($"{Partner1} and {Partner2} have no children.");
+        }
+        else
+        {
+            Console.WriteLine($"{Partner1} and {Partner2} have the following children:");
+            foreach (var child in Children)
+            {
+                string stepChildStatus = child.IsStepChild ? "(Stepchild)" : "";
+                Console.WriteLine($"- {child.Name} {stepChildStatus}");
+            }
+        }
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        // Create a married couple
+        Couple couple = new Couple("Alice", "Bob");
+
+        // Check if they have kids
+        if (!couple.HasKids())
+        {
+            Console.WriteLine("Alice and Bob have no kids.");
+            
+            // Let them adopt kids
+            couple.AdoptChild("Charlie");
+            couple.AdoptChild("David", isStepChild: true);
+        }
+
+        // Show the children of the couple
+        couple.ShowChildren();
+
+        // Show parents of a specific child
+        Baby baby = new Baby("Charlie", false);
+        couple.ShowParents(baby);
+    }
+}
+
+/*
+Output:
+Alice and Bob have no kids.
+Alice and Bob have adopted a child named Charlie.
+Alice and Bob have adopted a child named David.
+Alice and Bob have the following children:
+- Charlie 
+- David (Stepchild)
+Charlie is the child of Alice and Bob.
+*/
